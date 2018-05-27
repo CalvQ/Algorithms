@@ -6,4 +6,3 @@ def qsort(a):
     smaller = qsort([x for x in a if x < pivot])
     larger = qsort([x for x in a if x > pivot])
     return smaller + pivots + larger
-    

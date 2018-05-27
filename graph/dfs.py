@@ -1,5 +1,6 @@
 def dfs(graph, root, visitor):
     visited = []
+
     def dfs_walk(node):
         visited.append(node)
         visitor(node)
