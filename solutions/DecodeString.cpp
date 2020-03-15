@@ -24,9 +24,9 @@ std::string decodeString(std::string input){
             /*temp char to hold each character*/
             char temp = stack.top();
             /*string to store the resulting string in the brackets*/
-            std::string eval;
+            std::string eval ("");
             while(temp != '['){
-                eval += temp;
+                eval.insert(eval.begin(), temp);
                 stack.pop();
                 temp = stack.top();
             }
@@ -53,9 +53,9 @@ std::string decodeString(std::string input){
     }
 
     /*final string to contain everything in the stack*/
-    std::string result;
+    std::string result ("");
     while(!stack.empty()){
-        result += stack.top();
+        result.insert(result.begin(), stack.top());
         stack.pop();
     }
 
