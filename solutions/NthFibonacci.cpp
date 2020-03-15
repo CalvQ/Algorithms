@@ -40,4 +40,7 @@ int main(){
 
     std::cout << "The " << input <<"th Fibonacci Number is "
         << fibonacci(input, calculated) << "\n";
+
+    /*deallocate to prevent memory leaks*/
+    free(calculated);
 }
