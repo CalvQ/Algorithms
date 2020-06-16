@@ -4,7 +4,7 @@ Statement:          Given a number n, print the n-th Fibonacci Number.
 Example:
     fibonacci(9)
     ->  34
-Note:               This assuems that the sequence begins with 1,1,2, etc.
+Note:               This assumes that the sequence begins with 1,1,2, etc.
 --------------------------------------------------------------------------*/
 
 #include <iostream>
