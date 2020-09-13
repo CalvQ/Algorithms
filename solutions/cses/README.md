@@ -1,5 +1,5 @@
-#CSES Problem Set
+# CSES Problem Set
 
-Problems can be found here: [problem set](https://cses.fi/problemset/)
+Problems can be found [here](https://cses.fi/problemset/)
 
-Current progress: 0 of 200 completed.
+Current progress: 4 of 200 completed.
