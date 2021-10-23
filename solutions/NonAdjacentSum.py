@@ -36,3 +36,6 @@ class Solution:
 
 sum = Solution().largeSum([5, 1, 1, 5])
 assert sum == 10
+
+sum = Solution().largeSum([2, 4, 6, 2, 5])
+assert sum == 13
