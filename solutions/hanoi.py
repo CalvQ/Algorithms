@@ -1,3 +1,11 @@
+'''
+Problem:            Tower of Hanoi
+Statement:          Given an tower of height n, how do you move 
+                    the disks to a 3rd peg, making sure all disks 
+                    are in increasing size.
+'''
+
+
 class Tower:
     def __init__(self, n):
         self.one = [x for x in range(n)]
