@@ -3,18 +3,19 @@ using namespace std;
 
 #define ll long long
 
-int main(){
+int main() {
     int n;
     cin >> n;
-    ll total=0, l=0;
-    cin >> l;
-    for(int i=1; i<n; ++i){
+    ll total = 0, input = 0;
+    cin >> input;
+    // for each incoming number...
+    for (int i = 1; i < n; ++i) {
         int j;
         cin >> j;
-        if(l>j){
-            total += l-j;
-        }else {
-            l = j;
+        if (input > j) {
+            total += input - j;
+        } else {
+            input = j;
         }
     }
     cout << total;
