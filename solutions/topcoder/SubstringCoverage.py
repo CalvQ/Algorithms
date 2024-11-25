@@ -1,0 +1,102 @@
+# https://archive.topcoder.com/ProblemStatement/pm/18168
+# from collections import defaultdict
+
+
+def substringCoverage(needle, H):
+    # how many ways to tile string into length
+    # abracadabra H=11 -> 1
+    # H=(11+7) += (H=11)
+    # H=(11+11) += (H=11)
+
+    # abracadabraabracadabra
+    # abracadabracadabra
+    # print("STARGTING VALUE: ", H)
+    # print("NEEDLE LENGTH", len(needle))
+    if len(needle) > H:
+        return 0
+
+    if len(needle) == H:
+        return 1
+
+    # how to reduce needle to smallest component
+    tileLength = [0]
+    for needleIdx in range(1, len(needle)):
+        if needle[0:needleIdx] == needle[-needleIdx:]:
+            tileLength.append(needleIdx)
+    # print(tileLength)
+
+    # dpUpdate = len(needle) - tileLength
+
+    # print(tileLength)
+    # print(dpUpdate)
+
+    # stringCounts = defaultdict(int)
+    # stringCounts[len(needle)] = 1
+    lengthCounts = set()
+    lengthCounts.add(len(needle))
+    # bfs = [len(needle)]
+    bfs = set()
+    bfs.add(len(needle))
+    while len(bfs) > 0:
+        # print("BFS: ", bfs)
+        # temp_bfs = []
+        temp_bfs = set()
+        for hValue in bfs:
+            for overlap in tileLength:
+                if hValue + (len(needle) - overlap) <= H:
+                    if hValue + (len(needle) - overlap) not in lengthCounts:
+                        lengthCounts.add(hValue + (len(needle) - overlap))
+                        temp_bfs.add(hValue + (len(needle) - overlap))
+                    # stringCounts[hValue +
+                    #  (len(needle) - overlap)] += stringCounts[hValue]
+
+            # print(temp_bfs)
+            # if tileLength != 0:
+            #     if hValue + dpUpdate <= H:
+            #         temp_bfs.append(hValue + dpUpdate)
+            #         stringCounts[hValue + dpUpdate] += stringCounts[hValue]
+            # if hValue + len(needle) <= H:
+            #     temp_bfs.append(hValue + len(needle))
+            #     stringCounts[hValue + len(needle)] += stringCounts[hValue]
+        bfs = temp_bfs
+
+    # print(stringCounts)
+
+    # output = sum(stringCounts.values())
+    # print(sorted(list(lengthCounts))[:15])
+    output = len(lengthCounts)
+
+    # output = 0
+    # output = substringCoverage(needle, H-dpUpdate) + \
+    # 1 + 1 + substringCoverage(needle, H-len(needle))
+    return output
+
+
+print(substringCoverage("abc", 11))  # 3
+print(substringCoverage("abracadabra", 24))  # 4
+print(substringCoverage("coco", 20))  # 9
+# # print(substringCoverage("nrznr", 14318558))  # 14318550
+# print(substringCoverage("thezilgxjth", 36))  # 6
+# print(substringCoverage("hhsshsssshhshhh", 1))  # 0
+# print(substringCoverage("laibefxqpgzyzpqola", 858))  # 393
+# print(substringCoverage("ewmiew", 6734477))  # 3367235
+# print(substringCoverage("hhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkhhmkhfhmfhkffkmkkkfhhkmmkfmkmkhkkkmmmkmkhmhkkkfkmfhfmkhmhkfhmmkkmkfkmkmmfkhhhhhmffmmhhkfhffmhhhfmfmhmmhhfmhhmhkmmfkkmkfhkkkffhmhmfkffkhhhfmffmfhmmmmfmmkfkffhfmkffkhkkhkhkmmhkfkkkhkmfmfkhmkmfhfhmmffhkfkffmffkffmhmmfkmmhhkhhhfmkffkffhkhfkhmfkkhfmhhmhhkkhkhkfkffmmmfmhfhmfkffkmmkhhfkfmkffhkmkhmhkmfmkmkhhhmkmfmkkmhhmkmffmkfhfffmkmfhmmfkhhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkffhmhhfhhkmmmhfhmfmhmkkmhmfmmkfhmhmkhfhhmmfkhkmfhmhmkfhfmmkfhfmfhkkffmfmkhfkfkkkmkkffkkkhmhmhfmmkhhmkhfkhkmmmkhmhmffhfffhkmfmhkhkmmfmhmkkmfkmffmhhmmkhmmmhfmhfhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkhhmkhfhmfhkffkmkkkfhhkmmkfmkmkhkkkmmmkmkhmhkkkfkmfhfmkhmhkfhmmkkmkfkmkmmfkhhhhhmffmmhhkfhffmhhhfmfmhmmhhfmhhmhkmmfkkmkfhkkkffhmhmfkffkhhhfmffmfhmmmmfmmkfkffhfmkffkhkkhkhkmmhkfkkkhkmfmfkhmkmfhfhmmffhkfkffmffkffmhmmfkmmhhkhhhfmkffkffhkhfkhmfkkhfmhhmhhkkhkhkfkffmmmfmhfhmfkffkmmkhhfkfmkffhkmkhmhkmfmkmkhhhmkmfmkkmhhmkmffmkfhfffmkmfhmmfkhhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkhmkmhkkhkfmkmmfmhkhhfmfmhfkkmhkhmmhhhffmhhhmmffmffmhmkfkhhmmkhhkmfffhkmkhhfkkhmffhfkmmmkmkmfkffkmhkkmfmhmfhfmfkfkhmkmfhkkmhmkffhfhhkkfkfmkfkhmmhmkkmfhfffkfhfhmhmkfhkmffmhmkhmkhfmmhfmfffkhfkhhhhhhhmhkmfmfkmmmkmhhkmfkffkhfmmhhhhkfffmmhkffhhhmfkhkfhhkmkfhhmhhhmhkmfhmkhfhmmmmfhhmkkfhkfmkkmhmhmhmfhfhhfhmmhmfkffmfmmfmhfffkmkkkhkkmmkhkhmmkhkmhfmmmmhhfkfkhhmmkmffkfhkhfmmkmhhhfkmhhkmkhffmfkfmmhkfkmmmkfkhhfkhkhkfkmmmmmkmmhkfffhhmmfhkkkmhhfkkfmkmhmfkhkmmhffmmmmhkfmhhhfkfffmmffmfkmmhfhmhmmkmmfkkffkkmmmhkhhhmfhmfmmhhhhkmmmmmhmhfkkffkffmkmkmmhfkkmkkkmfkkhhhhhmhkmkhhkhhkmfmfffkhffhmfmfhhffkhhmhhfhhkfmhkfkhfmfmmffhmkmkkffhhhkhhmfhhkmkfmkmmffkkhkkfhmhhmhhmffkmhkfkkfkffmffkkfmmkmkfhhhmffmkkfmhhkfkkmfkmmhkkfkffkmkkkffffkfkhkhmhfffhkhkfmfhkffhkkmffffkfffmkhmffhkkhkkfmmkmmmmmmmhfmkmkfhffkkmfkmhkfmkkmmmmmkkmhfkhkhkhhfffhmkhkffhkhmmkkkkhkkffmmfhhmmhhfhhhhhfhkfmkmmhmfffkmmhmmffmhkfhhkkhhkffmkhmfkkkhhfkkmhfkhhmhkfmfkfhfmkkhmffhmmhmfhfmhhhffhfkfkhkmfmhfkfhhhkhmhkhffkhhhmfkmfkkhkfmmmfmhkkhfkhmffkhhhhffhkkmhhffkkkfmffffmmhhkmmfkkfmhfhfhhmmhhfhmmhffkmhmkffhfmhkkmmfmhkhfkkkhmfhhhmffkhfkhffkmfmhfkmhhkhhkmmmmfkfkmmhmkhkhhhmmmkkfmmhfmhfkkhfhhkhkmfkmhmmhmmmmfhhfhkkhkfmffkffmhkfhhkmfkkmkhhkkkkkkmkhhfmfkfkkkkhhkkmmkhkmfhffkhfhffhhmhffmhkkhfmhmkkhffmhfkhkfmhhffhmkmhkfmkfmhhhhhkmmffmfkkhmmmhkkkfkmhhfkfffmfmkfhfmkhmkffkhhhfhmhkmfkkhfhfkhfkfmmmkhhfmhhkhhkmkhmfffmkmkffhkhkfkffmfhkffmfhhhhfhhkmkhfkhffhfkkmkfmhkkffhfmkmmhfkhkmffffffkkhmfffffhmfhfmkmkhfffkhffkffkmkhmmkkkhfmffhfkfkfhfhmmkmkhmffhfmffkhmmmkfhkfmfkfmffmkkmkmkhhkfhmmfkkmkkkkhfmfhhhhmkfkmkmffkhkhmkfkfkmhmmfhfhmhkmmhhfkfmkmkmmhkmkhmhhffffkhfmhfmmfmmkkmmhkkhmkfkhkfhhhmfmmmfmmmmhkfmhhmkhhfmmmmfmmkmmmfmmkfhhhmhffkkfhhhhkmhffmkmhkmhmfhfhkmmfhmmffmmfmmkmmkhkkmhmkffffkhhhkhmhfkmffmmmhfhkmfkmhkkmhhhkfkmhfmkkmmkmffhmmfhfhkkhhmmhkkkhhhkmkkffkmmkfkmfffmhkfkkkhmfkhkkffhmkkhkmmkmkmkhfhfhhkhmmfkmfmhkkhfhmkmfhhmmhmmkfmmfhhkmmmhfhmmmkkmhhfmkfhfhhfkhfkhfmmfkffhmhfmkhmfhkfhmfkmfffmfkfhhfmmffhmkhhhhfkfhmhmkkfmmfkkmmmmfmhfkhmmhhhkhkmkffmfmfhffffhmmkhfmmfmkffkkkhhkkfffmkkkkfkmhkmkhkmkmfkkffmkfhkhmkfhfffmkmfhfkffmhhhhfhmfkmfkmhkmhfffkhkhmmfffmmmmkmmkkffkmfffmfmmfmkfkhmmfmkkmkhfhkfhfmmfhmmkfkmffkfmfhfkfkmhmhmhkmmhmhhmmkhmhmffmmhfhmkmmhhmkkkkmmkhhmkhfhfkhhkmfhmmfmkkfffmfkkmfmhkhhfhmkmhhfkmmmmmmhmmmmffhkkfkmmmfhkmkmkfhhhkhffmfkkmkkmhkhmhfmhkfhkmhkfkmfmhmffmkmmfkfmhmhkfhhmfkhkfhkkffhkhmfmmkhfhkhhffhmkfhmkkhkfhkhfmhfmmmhkfkmfkfmfmfmmhmkfmmhfffmmkhmhmmmkkfmmkkfmmkmmkmkhfhmkhmfmfhmmmmkfkkhhmkmkhmffkhmkhhkhmfmkmhmhkmfhhhfhfmmhhhkmmfmkhmfhmmhhhffmhkffhffhhmffkfmkfkfkhmmffkkfhfmhfkkmkffmffmmhkhfmkhkmhhkhkfhhhkhffhfmkkkfmmfhfmmmhfmfhffmfmmmkfmmfmkhfhkkhmffmmmhhkkhhffmfkmhmkkmmffmffhkkkfhmhhhhmmmmffkmfmffkfhffkkmhkkkkmffkkfmfkmhhkmmhmmmhkfhkmmkhkhmhfkkhhfkkkkhkhhhfmkffhhfkffhkhkfkhhkmkmkkkmhkmkhfmkhfhhkmhfmhffhfmmkfhkffmmmhffmkfmfmhkhmfkhfhfkhkffmmkmkfkffhhhhhfkfkkfhffmfkmfffffmkhkkfkkmmkmkmmhhkmmhhhkkmkhhmmffmkhfhfmkhhmkmkfhmhhmmmkmfmfhmhkkmhkkfmffmmkmkkfmhkkmmmfmmhhmkhfhmfhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkhhmkhfhmfhkffkmkkkfhhkmmkfmkmkhkkkmmmkmkhmhkkkfkmfhfmkhmhkfhmmkkmkfkmkmmfkhhhhhmffmmhhkfhffmhhhfmfmhmmhhfmhhmhkmmfkkmkfhkkkffhmhmfkffkhhhfmffmfhmmmmfmmkfkffhfmkffkhkkhkhkmmhkfkkkhkmfmfkhmkmfhfhmmffhkfkffmffkffmhmmfkmmhhkhhhfmkffkffhkhfkhmfkkhfmhhmhhkkhkhkfkffmmmfmhfhmfkffkmmkhhfkfmkffhkmkhmhkmfmkmkhhhmkmfmkkmhhmkmffmkfhfffmkmfhmmfkhhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkffhmhhfhhkmmmhfhmfmhmkkmhmfmmkfhmhmkhfhhmmfkhkmfhmhmkfhfmmkfhfmfhkkffmfmkhfkfkkkmkkffkkkhmhmhfmmkhhmkhfkhkmmmkhmhmffhfffhkmfmhkhkmmfmhmkkmfkmffmhhmmkhmmmhfmhfhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfkhhmkhfhmfhkffkmkkkfhhkmmkfmkmkhkkkmmmkmkhmhkkkfkmfhfmkhmhkfhmmkkmkfkmkmmfkhhhhhmffmmhhkfhffmhhhfmfmhmmhhfmhhmhkmmfkkmkfhkkkffhmhmfkffkhhhfmffmfhmmmmfmmkfkffhfmkffkhkkhkhkmmhkfkkkhkmfmfkhmkmfhfhmmffhkfkffmffkffmhmmfkmmhhkhhhfmkffkffhkhfkhmfkkhfmhhmhhkkhkhkfkffmmmfmhfhmfkffkmmkhhfkfmkffhkmkhmhkmfmkmkhhhmkmfmkkmhhmkmffmkfhfffmkmfhmmfkhhhfkmhkkmkkhffmfffhhfkmkhmmfhhfkmhkkmkkhffmfffhhfk", 11538))  # 7
+print(substringCoverage("orgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgoworgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgoworgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjorgowjorgowjwpjo", 10189))  # 89
+
+# cocococo
+# coco + coco
+# cococo + co
+
+# thezilgxjth
+# thezilgxjththezilgxjth
+# thezilgxjthezilgxjth
+# thezilgxjthezilgxjththezilgxjth
+# thezilgxjththezilgxjththezilgxjth
+# thezilgxjththezilgxjthezilgxjth
+# thezilgxjthezilgxjthezilgxjth
+
+
+# nrznr
+# nrznrznr
+# nrznrnrznr
+# nrznrznrznr
