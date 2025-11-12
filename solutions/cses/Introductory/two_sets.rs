@@ -38,5 +38,4 @@ fn main() {
     for item in &set2 {
         print!("{} ", item);
     }
-    println!();
 }
