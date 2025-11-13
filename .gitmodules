@@ -1,0 +1,3 @@
+[submodule "solutions/euler"]
+	path = solutions/euler
+	url = https://github.com/CalvQ/euler.git
