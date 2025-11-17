@@ -1,2 +1,3 @@
 # Algorithms
-A collection of algorithms.
+
+A collection of algorithms and code snippets.
